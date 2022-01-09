@@ -4,13 +4,17 @@
   "description": "Hotdog Hallway Web Server",
   "main": "index.js",
   "scripts": {
-    "start": "node ./server/index.js"
+    "start": "node ./server/index.js",
+    "dev": "node ./server/index.js"
   },
   "author": "emboiko",
   "license": "ISC",
   "dependencies": {
-    "dotenv": "^10.0.0",
     "express": "^4.17.2",
     "mongoose": "^6.1.5"
+  },
+  "devDependencies": {
+    "dotenv": "^10.0.0",
+    "nodemon": "^2.0.15"
   }
 }
