@@ -1,0 +1,14 @@
+{
+  "name": "hotdog-hallway",
+  "version": "1.0.0",
+  "description": "Hotdog Hallway Web Server",
+  "main": "index.js",
+  "scripts": {
+    "start": "node src/index.js"
+  },
+  "author": "emboiko",
+  "license": "ISC",
+  "dependencies": {
+    "express": "^4.17.2"
+  }
+}
