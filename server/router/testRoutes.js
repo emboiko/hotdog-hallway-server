@@ -2,8 +2,7 @@ var express = require('express')
 var router  = express.Router()
 
 router.get('/', (req, res) => {
-  console.log(req)
-  res.end()
+  res.json({message:"bababooey"})
 })
 
 module.exports = router
