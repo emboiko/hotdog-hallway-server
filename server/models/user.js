@@ -42,13 +42,7 @@ const userSchema = new mongoose.Schema({
     timestamps: true
 })
 
-// userSchema.virtual("tasks",{
-//     ref: "Task",
-//     localField: "_id",
-//     foreignField: "owner"
-// })
-
-// User instance
+// User Instance
 userSchema.methods.generateAuthToken = async function() {
     const user = this
     const token = jwt.sign({_id: user._id.toString()}, process.env.JWT_SECRET)
@@ -68,7 +62,7 @@ userSchema.methods.toJSON = function() {
     return userObject
 }
 
-//User
+// User Model
 userSchema.statics.findByCredentials = async (email, pw) => {
     const user = await User.findOne({ email })
     if (!user) throw new Error("Unable to login.")
@@ -79,6 +73,7 @@ userSchema.statics.findByCredentials = async (email, pw) => {
     return user
 }
 
+// Hooks
 userSchema.pre("save", async function (next) {
     const user = this
     if (user.isModified("password")) {
@@ -86,12 +81,6 @@ userSchema.pre("save", async function (next) {
     }
     next()
 })
-
-// userSchema.pre("remove", async function (next) {
-//     const user = this
-//     await Task.deleteMany({owner:user._id})
-//     next()
-// })
 
 const User = mongoose.model("user", userSchema)
 module.exports = User
