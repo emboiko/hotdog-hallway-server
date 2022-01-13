@@ -32,7 +32,7 @@ const userSchema = new mongoose.Schema({
         required: true
     },
     applicationID: {
-        type: string,
+        type: String,
     },
     previousCharacterNames: [{
         characterName: {
