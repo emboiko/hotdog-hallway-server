@@ -3,7 +3,6 @@ const multer = require("multer")
 const sharp = require("sharp")
 const User = require("../models/user")
 const auth = require("../middleware/auth")
-// const {welcomeEmail, cancelEmail} = require("../emails/account") // not implemented 
 
 const router = new express.Router()
 
@@ -24,7 +23,6 @@ router.post("/", async (req, res) => {
     const user = new User(req.body)
     try {
         await user.save()
-        // welcomeEmail(user.email, user.username)
         const token = await user.generateAuthToken()
         res.status(201).send({user, token})
     } catch (err) {
@@ -84,7 +82,7 @@ router.post("/me/avatar", auth, upload.single("avatar"), async (req, res) => {
 
 router.patch("/me", auth, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ["username", "email", "password"]
+    const allowedUpdates = ["discordUsername", "characterName", "password"]
     const valid = updates.every((update) => allowedUpdates.includes(update))
 
     if (!valid) return res.status(400).send({error: "Invalid Updates"})
@@ -101,7 +99,6 @@ router.patch("/me", auth, async (req, res) => {
 router.delete("/me", auth, async (req, res) => {
     try {
         await req.user.remove()
-        // cancelEmail(req.user.email, req.user.username)
         res.send(req.user)
     } catch (err) {
         res.status(500).send()

@@ -1,24 +1,19 @@
 const mongoose = require("mongoose")
-const validator = require("validator")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
+// Todo: validations
+
 const userSchema = new mongoose.Schema({
-    username: {
+    discordUsername: {
         type: String,
         required: true,
         trim: true,
-        default: "Anonymous",
     },
-    email: {
+    characterName: {
         type: String,
         required: true,
         trim: true,
-        lowercase: true,
-        unique: true,
-        validate(email) {
-            if (!validator.isEmail(email)) throw new Error("Invalid Email.")
-        }
     },
     password: {
         type: String,
@@ -32,12 +27,25 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: Buffer
     },
+    isCouncilMember: {
+        type: Boolean,
+        required: true
+    },
+    applicationID: {
+        type: string,
+    },
+    previousCharacterNames: [{
+        characterName: {
+            type: String,
+            required: true
+        }
+    }],
     tokens: [{
         token: {
             type: String,
             required: true
         }
-    }]
+    }],
 },{
     timestamps: true
 })
