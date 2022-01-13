@@ -20,6 +20,8 @@ const upload = multer({
 })
 
 router.post("/", async (req, res) => {
+    req.body.isCouncilMember = false
+    req.body.isGuildMember = false
     const user = new User(req.body)
     try {
         await user.save()
@@ -32,7 +34,7 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.email, req.body.password)
+        const user = await User.findByCredentials(req.body.characterName, req.body.password)
         const token = await user.generateAuthToken()
         res.send({user, token})
     } catch (err) {
