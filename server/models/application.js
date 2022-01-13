@@ -13,7 +13,10 @@ const applicationSchema = new mongoose.Schema({
     testTitleField: {
         type: String
     },
-    // todo: isDeclined
+    status: { // [pending, isDeclined, isAccepted]
+        type: String,
+        required: true
+    }
 },{
     timestamps: true
 })

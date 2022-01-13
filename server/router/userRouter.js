@@ -2,7 +2,7 @@ const express = require("express")
 const multer = require("multer")
 const sharp = require("sharp")
 const User = require("../models/user")
-const auth = require("../middleware/auth")
+const isLoggedIn = require("../middleware/isLoggedIn")
 
 const router = new express.Router()
 
@@ -40,7 +40,7 @@ router.post("/login", async (req, res) => {
     }
 })
 
-router.post("/logout", auth, async (req, res) => {
+router.post("/logout", isLoggedIn, async (req, res) => {
     try {
         req.user.tokens = req.user.tokens.filter((token) => {
             return token.token !== req.token
@@ -53,7 +53,7 @@ router.post("/logout", auth, async (req, res) => {
     }
 })
 
-router.post("/logoutAll", auth, async (req, res) => {
+router.post("/logoutAll", isLoggedIn, async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
@@ -63,11 +63,11 @@ router.post("/logoutAll", auth, async (req, res) => {
     }
 })
 
-router.get("/me", auth, async (req, res) => {
+router.get("/me", isLoggedIn, async (req, res) => {
     res.send(req.user)
 })
 
-router.post("/me/avatar", auth, upload.single("avatar"), async (req, res) => {
+router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) => {
     const buffer = await sharp(req.file.buffer)
     .resize({width: 250,height: 250})
     .png()
@@ -80,7 +80,7 @@ router.post("/me/avatar", auth, upload.single("avatar"), async (req, res) => {
     res.status(400).send({error: err.message})
 })
 
-router.patch("/me", auth, async (req, res) => {
+router.patch("/me", isLoggedIn, async (req, res) => {
     const updates = Object.keys(req.body)
     const allowedUpdates = ["discordUsername", "characterName", "password"]
     const valid = updates.every((update) => allowedUpdates.includes(update))
@@ -96,7 +96,7 @@ router.patch("/me", auth, async (req, res) => {
     }
 })
 
-router.delete("/me", auth, async (req, res) => {
+router.delete("/me", isLoggedIn, async (req, res) => {
     try {
         await req.user.remove()
         res.send(req.user)
@@ -105,7 +105,7 @@ router.delete("/me", auth, async (req, res) => {
     }
 })
 
-router.delete("/me/avatar", auth, async (req, res) => {
+router.delete("/me/avatar", isLoggedIn, async (req, res) => {
     req.user.avatar = undefined
     await req.user.save()
     res.send()
