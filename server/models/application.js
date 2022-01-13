@@ -5,7 +5,15 @@ const applicationSchema = new mongoose.Schema({
         type: String,
         required: true,
         trim: true,
-    }
+    },
+    testBody: {
+        type: String,
+        required: true
+    },
+    testTitleField: {
+        type: String
+    },
+    // todo: isDeclined
 },{
     timestamps: true
 })

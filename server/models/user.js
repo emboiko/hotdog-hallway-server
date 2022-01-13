@@ -31,6 +31,10 @@ const userSchema = new mongoose.Schema({
         type: Boolean,
         required: true
     },
+    isGuildMember: {
+        type: Boolean,
+        required: true
+    },
     applicationID: {
         type: String,
     },
