@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         minlength: 7, 
         maxLength: 37,
         validate(nameString) {
-            if (!/\w+#\d{4}/.test(nameString)) throw new Error("Invalid Discord Username")
+            if (!/^\w+#\d{4}$/.test(nameString)) throw new Error("Invalid Discord Username")
         }
     },
     username: {
