@@ -10,7 +10,7 @@ const router = new express.Router()
 const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS] });
 discordClient.login(process.env.DISCORD_TOKEN);
 discordClient.once('ready', () => {
-	console.log('Discord Client Ready')
+	console.info('Discord Client Ready')
 })
 
 router.post("/", async (req, res) => {
@@ -26,7 +26,7 @@ router.post("/", async (req, res) => {
     discordClient.channels.cache.get(process.env.DISCORD_APPLICATION_CHANNEL_ID).send(message)
     res.status(200).json({message:"Success"})
   } catch (err) {
-    console.log(err)
+    console.error(err)
     res.status(500).json({error:err})
   }
 })

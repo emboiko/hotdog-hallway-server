@@ -8,5 +8,5 @@ mongoose.connect(
     useUnifiedTopology: true,
   }
 ).then(() => {
-  console.log("Database connected")
+  console.info("Database connected")
 })
