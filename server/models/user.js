@@ -98,6 +98,9 @@ userSchema.pre("save", async function (next) {
     if (user.isModified("password")) {
         user.password = await bcrypt.hash(user.password, 8)
     }
+    if (user.isModified("username")) {
+        user.username = user.username[0].toUpperCase() + user.username.slice(1)
+    }
     next()
 })
 
