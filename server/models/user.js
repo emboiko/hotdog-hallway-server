@@ -10,7 +10,7 @@ const userSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
-    characterName: {
+    username: {
         type: String,
         required: true,
         trim: true,
@@ -38,8 +38,8 @@ const userSchema = new mongoose.Schema({
     applicationID: {
         type: String,
     },
-    previousCharacterNames: [{
-        characterName: {
+    previousUsernames: [{
+        username: {
             type: String,
             required: true
         }
@@ -75,8 +75,8 @@ userSchema.methods.toJSON = function() {
 }
 
 // User Model
-userSchema.statics.findByCredentials = async (characterName, pw) => {
-    const user = await User.findOne({ characterName })
+userSchema.statics.findByCredentials = async (username, pw) => {
+    const user = await User.findOne({ username })
     if (!user) throw new Error("Unable to login.")
 
     const isMatch = await bcrypt.compare(pw, user.password)

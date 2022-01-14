@@ -17,7 +17,7 @@ router.post("/", async (req, res) => {
   const application = new Application(req.body)
 
   let message = ""
-  message += `New guild application recieved from ${application.characterName}.\n`
+  message += `New guild application recieved from ${application.username}.\n`
   message += "(Link wont work yet)\n"
   message += `${process.env.APP_URL}/applications/${application._id}\n`
   

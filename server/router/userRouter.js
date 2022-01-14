@@ -34,7 +34,7 @@ router.post("/", async (req, res) => {
 
 router.post("/login", async (req, res) => {
     try {
-        const user = await User.findByCredentials(req.body.characterName, req.body.password)
+        const user = await User.findByCredentials(req.body.username, req.body.password)
         const token = await user.generateAuthToken()
         res.send({user, token})
     } catch (err) {
@@ -84,7 +84,7 @@ router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) 
 
 router.patch("/me", isLoggedIn, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ["discordUsername", "characterName", "password"]
+    const allowedUpdates = ["discordUsername", "username", "password"]
     const valid = updates.every((update) => allowedUpdates.includes(update))
 
     if (!valid) return res.status(400).send({error: "Invalid Updates"})
