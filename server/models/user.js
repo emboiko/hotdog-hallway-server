@@ -2,27 +2,34 @@ const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
 const jwt = require("jsonwebtoken")
 
-// Todo: validations
-
 const userSchema = new mongoose.Schema({
     discordUsername: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
+        minlength: 7, 
+        maxLength: 37,
+        validate(nameString) {
+            if (!/\w+#\d{4}/.test(nameString)) throw new Error("Invalid Discord Username")
+        }
     },
     username: {
         type: String,
+        unique: true,
         required: true,
         trim: true,
+        minlength: 2,
+        maxlength: 12,
+        validate(nameString) {
+            if (!/^[a-z]{2,12}$/.test(nameString.toLowerCase())) throw new Error("Invalid Character Name")
+        }
     },
     password: {
         type: String,
         required: true,
         trim: true,
-        minlength: 7,
-        validate(password) {
-            if (password.toLowerCase().includes("password")) throw new Error("Invalid Password")
-        }
+        minlength: 7
     },
     avatar: {
         type: Buffer
