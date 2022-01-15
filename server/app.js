@@ -8,7 +8,7 @@ const app = express()
 
 app.use(express.json())
 app.use(helmet())
-app.use(cors({origin: process.env.APP_URL}))
+app.use(cors({origin: process.env.APP_URL, preflightContinue: true}))
 app.use(router)
 
 module.exports = app
