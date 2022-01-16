@@ -26,10 +26,17 @@ router.post("/", async (req, res) => {
     try {
         await user.save()
         const token = await user.generateAuthToken()
-        res.status(201).send({user, token})
-    } catch (err) {
-        console.error(err)
-        res.status(400).send(err)
+        res.status(201).json({user, token})
+    } catch (error) {
+        if (error.code === 11000) {
+            let dupeValue
+            Object.keys(error.keyValue).forEach((key) => {
+                dupeValue = error.keyValue[key]
+            })
+            res.status(400).json({error:`${dupeValue} is already in use.`})
+        } else {
+            res.status(500).json({error:"Internal Server Error."})
+        }
     }
 })
 
@@ -37,9 +44,9 @@ router.post("/login", async (req, res) => {
     try {
         const user = await User.findByCredentials(req.body.username, req.body.password)
         const token = await user.generateAuthToken()
-        res.send({user, token})
-    } catch (err) {
-        console.error(err)
+        res.status(200).json({user, token})
+    } catch (error) {
+        console.error(error)
         res.status(400).send()
     }
 })
@@ -51,9 +58,9 @@ router.post("/logout", isLoggedIn, async (req, res) => {
         })
 
         await req.user.save()
-        res.send()
-    } catch (err) {
-        console.error(err)
+        res.status(200).send()
+    } catch (error) {
+        console.error(error)
         res.status(500).send()
     }
 })
@@ -62,15 +69,15 @@ router.post("/logoutAll", isLoggedIn, async (req, res) => {
     try {
         req.user.tokens = []
         await req.user.save()
-        res.send()
-    } catch (err) {
-        console.error(err)
+        res.status(200).send()
+    } catch (error) {
+        console.error(error)
         res.status(500).send()
     }
 })
 
 router.get("/me", isLoggedIn, async (req, res) => {
-    res.send(req.user)
+    res.status(200).json({user: req.user})
 })
 
 router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) => {
@@ -81,7 +88,7 @@ router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) 
 
     req.user.avatar = buffer
     await req.user.save()
-    res.send()
+    res.status(200).send()
 }, (err, req, res, next) => {
     res.status(400).send({error: err.message})
 })
@@ -97,8 +104,8 @@ router.patch("/me", isLoggedIn, async (req, res) => {
         updates.forEach((update) => req.user[update] = req.body[update])
         await req.user.save()
         res.status(202).send(req.user)
-    } catch (err) {
-        res.status(400).send(err)
+    } catch (error) {
+        res.status(400).send(error)
     }
 })
 
@@ -106,7 +113,7 @@ router.delete("/me", isLoggedIn, async (req, res) => {
     try {
         await req.user.remove()
         res.send(req.user)
-    } catch (err) {
+    } catch (error) {
         res.status(500).send()
     }
 })
@@ -124,7 +131,7 @@ router.get("/:id/avatar", async (req, res) => {
 
         res.set("Content-Type","image/png")
         res.send(user.avatar)
-    } catch (err) {
+    } catch (error) {
         res.status(404).send()
     }
 })

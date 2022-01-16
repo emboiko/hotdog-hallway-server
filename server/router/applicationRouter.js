@@ -25,9 +25,9 @@ router.post("/", async (req, res) => {
     await application.save()
     discordClient.channels.cache.get(process.env.DISCORD_APPLICATION_CHANNEL_ID).send(message)
     res.status(200).json({message:"Success"})
-  } catch (err) {
-    console.error(err)
-    res.status(500).json({error:err})
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({error})
   }
 })
 
@@ -35,11 +35,11 @@ router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
   let application
   try {
     application = await Application.findById(req.params.id)
-  } catch (err) {
+  } catch (error) {
     return res.status(500).json({error:"Internal Server Error"})
   }
   if (!application) return res.status(404).json({error:"Application Not found."})
-  res.status(200).json(application)
+  res.status(200).json({application})
 })
 
 module.exports = router
