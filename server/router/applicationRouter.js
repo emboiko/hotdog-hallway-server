@@ -1,17 +1,11 @@
 require("dotenv").config()
 const express = require("express")
-const { Client, Intents } = require('discord.js');
 const Application = require("../models/application")
 const isLoggedIn = require("../middleware/isLoggedIn")
 const isCouncilMember = require("../middleware/isCouncilMember")
+const DiscordService = require("../services/DiscordService")
 
 const router = new express.Router()
-
-const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS] });
-discordClient.login(process.env.DISCORD_TOKEN);
-discordClient.once('ready', () => {
-	console.info('Discord Client Ready')
-})
 
 router.post("/", async (req, res) => {
   const application = new Application(req.body)
@@ -23,7 +17,7 @@ router.post("/", async (req, res) => {
   
   try {
     await application.save()
-    discordClient.channels.cache.get(process.env.DISCORD_APPLICATION_CHANNEL_ID).send(message)
+    DiscordService.sendMessageToChannel("applications", message)
     res.status(200).json({message:"Success"})
   } catch (error) {
     console.error(error)
