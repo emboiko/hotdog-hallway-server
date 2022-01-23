@@ -98,14 +98,14 @@ router.patch("/me", isLoggedIn, async (req, res) => {
     const allowedUpdates = ["discordUsername", "username", "password"]
     const valid = updates.every((update) => allowedUpdates.includes(update))
 
-    if (!valid) return res.status(400).send({error: "Invalid Updates"})
+    if (!valid) return res.status(400).json({error: "Invalid Updates"})
 
     try {
         updates.forEach((update) => req.user[update] = req.body[update])
         await req.user.save()
-        res.status(202).send(req.user)
+        res.status(202).send()
     } catch (error) {
-        res.status(400).send(error)
+        res.status(500).json({error: "Internal Server Error."})
     }
 })
 
