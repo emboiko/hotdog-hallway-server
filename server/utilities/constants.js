@@ -3,6 +3,13 @@ const DISCORD_CHANNELS = {
   "general-chat": "304008740271816704"
 }
 
+const APPLICATION_STATUSES = {
+  pending: "pending",
+  declined: "declined",
+  accepted: "accepted",
+}
+
 module.exports = {
-  DISCORD_CHANNELS
+  DISCORD_CHANNELS,
+  APPLICATION_STATUSES
 }

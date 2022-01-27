@@ -1,21 +1,65 @@
 const mongoose = require("mongoose")
 
 const applicationSchema = new mongoose.Schema({
-    username: {
+    playerCharacterName: {
+        type: String,
+        required: true,
+    },
+    playerClass: {
         type: String,
         required: true,
         trim: true,
     },
-    testBody: {
+    playerRace: {
         type: String,
-        required: true
+        required: true,
+        trim: true,
     },
-    testTitleField: {
-        type: String
+    playerInterestedInRaiding: {
+        type: Boolean,
+        required: true,
     },
-    status: { // [pending, isDeclined, isAccepted]
+    playerAgreedToRaidTimes: {
+        type: Boolean,
+        required: true,
+    },
+    playerAgreedToLootCouncil: {
+        type: Boolean,
+        required: true,
+    },
+    playerAgreedToAttendancePolicy: {
+        type: Boolean,
+        required: true,
+    },
+    playerAgreedToGemsAndEnchants: {
+        type: Boolean,
+        required: true,
+    },
+    playerAgreedToWorkingMicrophone: {
+        type: Boolean,
+        required: true,
+    },
+    playerInterestedInPvP: {
+        type: Boolean,
+        required: true,
+    },
+    playerRaidUtility: {
         type: String,
-        required: true
+        trim: true
+    },
+    playerAdditionalInfo: {
+        type: String,
+        trim: true
+    },
+    status: { // [pending, declined, accepted]
+        type: String,
+        required: true,
+        trim: true
+    },
+    owner:{
+        type: mongoose.Schema.Types.ObjectId,
+        required:true,
+        ref: "User"
     }
 },{
     timestamps: true

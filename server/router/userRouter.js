@@ -35,7 +35,7 @@ router.post("/", async (req, res) => {
             })
             res.status(400).json({error:`${dupeValue} is already in use.`})
         } else {
-            res.status(500).json({error:"Internal Server Error."})
+            res.status(500).json({error:"Internal Server Error"})
         }
     }
 })
@@ -105,7 +105,7 @@ router.patch("/me", isLoggedIn, async (req, res) => {
         await req.user.save()
         res.status(202).send()
     } catch (error) {
-        res.status(500).json({error: "Internal Server Error."})
+        res.status(500).json({error: "Internal Server Error"})
     }
 })
 
