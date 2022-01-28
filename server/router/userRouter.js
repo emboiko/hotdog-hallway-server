@@ -76,7 +76,7 @@ router.post("/logoutAll", isLoggedIn, async (req, res) => {
     }
 })
 
-router.get("/all", isLoggedIn, async (req, res) => {
+router.get("/all", async (req, res) => {
     let users
     try {
         users = await User.find()
