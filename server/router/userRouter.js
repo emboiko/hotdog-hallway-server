@@ -76,6 +76,22 @@ router.post("/logoutAll", isLoggedIn, async (req, res) => {
     }
 })
 
+router.get("/all", isLoggedIn, async (req, res) => {
+    let users
+    try {
+        users = await User.find()
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({error:"Internal Server Error"})
+    }
+    const payloadUsers = users.map((user) => ({
+        username: user.username,
+        isCouncilMember: user.isCouncilMember,
+        isGuildMember: user.isGuildMember,
+    }))
+    res.status(200).json({users: payloadUsers})
+})
+
 router.get("/me", isLoggedIn, async (req, res) => {
     res.status(200).json({user: req.user})
 })
