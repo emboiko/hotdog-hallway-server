@@ -15,6 +15,11 @@ const applicationSchema = new mongoose.Schema({
         required: true,
         trim: true,
     },
+    playerSpecialization: {
+        type: String,
+        required: true,
+        trim: true,
+    },
     playerInterestedInRaiding: {
         type: Boolean,
         required: true,

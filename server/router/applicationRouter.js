@@ -49,6 +49,17 @@ router.get("/mine/status", isLoggedIn, async (req, res) => {
   res.status(200).json({status:application.status})
 })
 
+router.get("/all", isLoggedIn, isCouncilMember, async (req, res) => {
+  let applications
+  try {
+    applications = await Application.find()
+  } catch (error) {
+    console.error(error)
+    res.status(500).json({error:"Internal Server Error"})
+  }
+  return res.status(200).json({applications})
+})
+
 router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
   let application
   try {
