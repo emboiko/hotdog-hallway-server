@@ -11,7 +11,7 @@ const userSchema = new mongoose.Schema({
         minlength: 7, 
         maxLength: 37,
         validate(nameString) {
-            if (!/^\w+#\d{4}$/.test(nameString)) throw new Error("Invalid Discord Username")
+            if (!/^.*#\d{4}$/.test(nameString)) throw new Error("Invalid Discord Username")
         }
     },
     username: {
@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 12,
         validate(nameString) {
-            if (!/^[a-z]{2,12}$/.test(nameString.toLowerCase())) throw new Error("Invalid Character Name")
+            if (!/^[\P{M}]{2,12}$/.test(nameString.toLowerCase())) throw new Error("Invalid Character Name")
         }
     },
     password: {
