@@ -22,7 +22,7 @@ const userSchema = new mongoose.Schema({
         minlength: 2,
         maxlength: 12,
         validate(nameString) {
-            if (!/^[\P{M}]{2,12}$/.test(nameString.toLowerCase())) throw new Error("Invalid Character Name")
+            if (!/^.{2,12}$/.test(nameString.toLowerCase())) throw new Error("Invalid Character Name")
         }
     },
     password: {
