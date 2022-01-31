@@ -73,7 +73,11 @@ router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
 })
 
 router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
-  if (!["accept", "decline"].includes(req.params.action)) return res.status(400).json({error:"Invalid Application Action"})
+  if (![APPLICATION_STATUSES.accepted, APPLICATION_STATUSES.declined].includes(req.params.action)) {
+    return res.status(400).json({error:"Invalid Application Action"})
+  }
+
+  const action = req.params.action
 
   let application
   try {
@@ -85,7 +89,8 @@ router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
   
   if (!application) return res.status(404).json({error:"Application Not found"})
 
-  application.status = APPLICATION_STATUSES.accepted
+  if (action === APPLICATION_STATUSES.accepted) application.status = APPLICATION_STATUSES.accepted
+  else application.status = APPLICATION_STATUSES.declined
   
   try {
     await application.save()
