@@ -21,7 +21,6 @@ router.post("/", isLoggedIn, async (req, res) => {
 
   let message = ""
   message += `New guild application recieved from ${application.playerCharacterName}.\n`
-  message += "(Link wont work yet)\n"
   message += `${process.env.APP_URL}/applications/${application._id}\n`
 
   application.status = APPLICATION_STATUSES.pending
