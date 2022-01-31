@@ -72,4 +72,29 @@ router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
   res.status(200).json({application})
 })
 
+router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
+  if (!["accept", "decline"].includes(req.params.action)) return res.status(400).json({error:"Invalid Application Action"})
+
+  let application
+  try {
+    application = await Application.findById(req.params.id)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error:"Internal Server Error"})
+  }
+  
+  if (!application) return res.status(404).json({error:"Application Not found"})
+
+  application.status = APPLICATION_STATUSES.accepted
+  
+  try {
+    await application.save()
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error:"Internal Server Error"})
+  }
+
+  res.status(200).send()
+})
+
 module.exports = router
