@@ -87,6 +87,7 @@ router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
   }
   
   if (!application) return res.status(404).json({error:"Application Not found"})
+  if ([APPLICATION_STATUSES.accepted, APPLICATION_STATUSES.declined].includes(application.status)) return res.status(400).json({error:`Application already ${application.status}`})
 
   if (action === APPLICATION_STATUSES.accepted) application.status = APPLICATION_STATUSES.accepted
   else application.status = APPLICATION_STATUSES.declined
