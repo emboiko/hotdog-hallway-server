@@ -71,6 +71,31 @@ router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
   res.status(200).json({application})
 })
 
+router.delete("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
+  let application
+  try {
+    application = await Application.findById(req.params.id)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error:"Internal Server Error"})
+  }
+  if (!application) return res.status(404).json({error:"Application Not found"})
+
+  let user
+  try {
+    user = await User.findById(application.owner)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error:"Internal Server Error"})
+  }
+  if (!user) return res.status(404).json({error:"User Not found"})
+
+  user.applicationID = ""
+  await user.save()
+  await application.remove()
+  res.status(200).send()
+})
+
 router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
   if (![APPLICATION_STATUSES.accepted, APPLICATION_STATUSES.declined].includes(req.params.action)) {
     return res.status(400).json({error:"Invalid Application Action"})
