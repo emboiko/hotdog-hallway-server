@@ -8,11 +8,11 @@ const router = new express.Router()
 
 const upload = multer({
     limits: {
-        fileSize: 1000000
+        fileSize: 5000000
     },
     fileFilter(req, file, cb) {
         if (!file.originalname.match(/.(jpg|jpeg|png)$/)) {
-            cb(new Error("Please upload an image"))
+            cb(new Error("Please upload a JPG or PNG image"))
         }
 
         cb(undefined,true)
@@ -104,7 +104,7 @@ router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) 
 
     req.user.avatar = buffer
     await req.user.save()
-    res.status(200).send()
+    res.status(200).json({imageData: buffer.toString("base64")})
 }, (err, req, res, next) => {
     res.status(400).send({error: err.message})
 })
