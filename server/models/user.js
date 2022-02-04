@@ -45,6 +45,18 @@ const userSchema = new mongoose.Schema({
     applicationID: {
         type: String,
     },
+    class: {
+        type: String,
+        trim: true,
+    },
+    race: {
+        type: String,
+        trim: true,
+    },
+    specialization: {
+        type: String,
+        trim: true,
+    },
     previousUsernames: [{
         username: {
             type: String,
