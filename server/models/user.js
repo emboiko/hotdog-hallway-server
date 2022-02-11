@@ -45,7 +45,7 @@ const userSchema = new mongoose.Schema({
     applicationID: {
         type: String,
     },
-    class: {
+    className: {
         type: String,
         trim: true,
     },
