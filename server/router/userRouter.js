@@ -111,7 +111,7 @@ router.post("/me/avatar", isLoggedIn, upload.single("avatar"), async (req, res) 
 
 router.patch("/me", isLoggedIn, async (req, res) => {
     const updates = Object.keys(req.body)
-    const allowedUpdates = ["discordUsername", "username", "password", "class", "race", "specialization"]
+    const allowedUpdates = ["discordUsername", "username", "password", "className", "race", "specialization"]
     const valid = updates.every((update) => allowedUpdates.includes(update))
 
     if (!valid) return res.status(400).json({error: "Invalid Updates"})
