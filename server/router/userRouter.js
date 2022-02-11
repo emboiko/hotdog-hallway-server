@@ -88,6 +88,9 @@ router.get("/all", async (req, res) => {
         username: user.username,
         isCouncilMember: user.isCouncilMember,
         isGuildMember: user.isGuildMember,
+        className: user.className,
+        race: user.race,
+        specialization: user.specialization,
     }))
     res.status(200).json({users: payloadUsers})
 })
