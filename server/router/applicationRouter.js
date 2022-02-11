@@ -19,6 +19,10 @@ router.post("/", isLoggedIn, async (req, res) => {
     user.applicationID = application._id
   }
 
+  user.className = application.playerClass
+  user.specialization = application.playerSpecialization
+  user.race = application.playerRace
+
   let message = ""
   message += `New guild application recieved from ${application.playerCharacterName}.\n`
   message += `${process.env.APP_URL}/applications/${application._id}\n`
