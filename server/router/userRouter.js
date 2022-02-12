@@ -91,6 +91,7 @@ router.get("/all", async (req, res) => {
         className: user.className,
         race: user.race,
         specialization: user.specialization,
+        avatar: user.avatar
     }))
     res.status(200).json({users: payloadUsers})
 })
