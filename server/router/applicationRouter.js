@@ -19,6 +19,10 @@ router.post("/", isLoggedIn, async (req, res) => {
     user.applicationID = application._id
   }
 
+  if (user.isGuildMember) {
+    return res.status(400).json({error: `User ${user.username} is already a guild member`})
+  }
+
   user.className = application.playerClass
   user.specialization = application.playerSpecialization
   user.race = application.playerRace
