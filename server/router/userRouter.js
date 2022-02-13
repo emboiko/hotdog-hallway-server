@@ -3,6 +3,7 @@ const multer = require("multer")
 const sharp = require("sharp")
 const User = require("../models/user")
 const isLoggedIn = require("../middleware/isLoggedIn")
+const { sendMessageToChannel } = require("../services/DiscordService")
 
 const router = new express.Router()
 
@@ -23,10 +24,10 @@ router.post("/", async (req, res) => {
     req.body.isCouncilMember = false
     req.body.isGuildMember = false
     const user = new User(req.body)
+    let token
     try {
         await user.save()
-        const token = await user.generateAuthToken()
-        res.status(201).json({user, token})
+        token = await user.generateAuthToken()
     } catch (error) {
         if (error.code === 11000) {
             let dupeValue
@@ -38,6 +39,8 @@ router.post("/", async (req, res) => {
             res.status(500).json({error:"Internal Server Error"})
         }
     }
+    await sendMessageToChannel("applications", `New user account created.\nUsername: ${user.username}\nDiscord Username: ${user.discordUsername}`)
+    res.status(201).json({user, token})
 })
 
 router.post("/login", async (req, res) => {
