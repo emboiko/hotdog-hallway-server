@@ -71,12 +71,15 @@ router.get("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
   let application
   try {
     application = await Application.findById(req.params.id)
+    applicationOwner = await User.findById(application.owner)
   } catch (error) {
     console.error(error)
     return res.status(500).json({error:"Internal Server Error"})
   }
-  if (!application) return res.status(404).json({error:"Application Not found"})
-  res.status(200).json({application})
+
+  if (!application || !applicationOwner) return res.status(404).json({error:"Not found"})
+  
+  res.status(200).json({application, discordUsername: applicationOwner.discordUsername})
 })
 
 router.delete("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
@@ -109,8 +112,6 @@ router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
     return res.status(400).json({error:"Invalid Application Action"})
   }
 
-  const action = req.params.action
-
   let application
   try {
     application = await Application.findById(req.params.id)
@@ -122,9 +123,18 @@ router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
   if (!application) return res.status(404).json({error:"Application Not found"})
   if ([APPLICATION_STATUSES.accepted, APPLICATION_STATUSES.declined].includes(application.status)) return res.status(400).json({error:`Application already ${application.status}`})
 
+  let user
+  try {
+    user = await User.findById(application.owner)
+  } catch (error) {
+    console.error(error)
+    return res.status(500).json({error:"Internal Server Error"})
+  }
+
+  const action = req.params.action
   if (action === APPLICATION_STATUSES.accepted) application.status = APPLICATION_STATUSES.accepted
   else application.status = APPLICATION_STATUSES.declined
-  
+
   try {
     await application.save()
   } catch (error) {
@@ -132,6 +142,7 @@ router.post("/:id/:action", isLoggedIn, isCouncilMember, async (req, res) => {
     return res.status(500).json({error:"Internal Server Error"})
   }
 
+  await DiscordService.sendApplicationResponseToUser(application.status, user.discordUsername)
   res.status(200).send()
 })
 
