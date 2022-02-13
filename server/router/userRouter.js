@@ -3,6 +3,7 @@ const multer = require("multer")
 const sharp = require("sharp")
 const User = require("../models/user")
 const isLoggedIn = require("../middleware/isLoggedIn")
+const isCouncilMember = require("../middleware/isCouncilMember")
 const { sendMessageToChannel } = require("../services/DiscordService")
 
 const router = new express.Router()
@@ -94,7 +95,9 @@ router.get("/all", async (req, res) => {
         className: user.className,
         race: user.race,
         specialization: user.specialization,
-        avatar: user.avatar
+        avatar: user.avatar,
+        id: user._id,
+        applicationID: user.applicationID,
     }))
     res.status(200).json({users: payloadUsers})
 })
@@ -129,6 +132,18 @@ router.patch("/me", isLoggedIn, async (req, res) => {
         res.status(202).send()
     } catch (error) {
         res.status(500).json({error: "Internal Server Error"})
+    }
+})
+
+router.delete("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if (!user) return res.status(404).json({error:"User Not Found"})
+    try {
+        await user.remove()
+        res.status(200).send({message:"Success"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).send()
     }
 })
 
