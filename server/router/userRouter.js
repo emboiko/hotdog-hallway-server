@@ -135,6 +135,22 @@ router.patch("/me", isLoggedIn, async (req, res) => {
     }
 })
 
+router.post("/:id/rank", isLoggedIn, isCouncilMember, async (req, res) => {
+    const user = await User.findById(req.params.id)
+    if (!user) return res.status(404).json({error:"User Not Found"})
+
+    if ((req.body.action === "Promote") && !user.isGuildMember) user.isGuildMember = true
+    if ((req.body.action === "Demote") && user.isGuildMember) user.isGuildMember = false
+    
+    try {
+        await user.save()
+        res.status(200).send({message:"Success"})
+    } catch (error) {
+        console.error(error)
+        res.status(500).send()
+    }
+})
+
 router.delete("/:id", isLoggedIn, isCouncilMember, async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) return res.status(404).json({error:"User Not Found"})
