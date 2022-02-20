@@ -35,9 +35,9 @@ router.post("/", async (req, res) => {
             Object.keys(error.keyValue).forEach((key) => {
                 dupeValue = error.keyValue[key]
             })
-            res.status(400).json({error:`${dupeValue} is already in use.`})
+            return res.status(400).json({error:`${dupeValue} is already in use.`})
         } else {
-            res.status(500).json({error:"Internal Server Error"})
+            return res.status(500).json({error:"Internal Server Error"})
         }
     }
     await sendMessageToChannel("applications", `New user account created.\nUsername: ${user.username}\nDiscord Username: ${user.discordUsername}`)
