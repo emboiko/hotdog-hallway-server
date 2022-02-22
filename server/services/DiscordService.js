@@ -1,12 +1,19 @@
 require("dotenv").config()
-const { Client, Intents } = require('discord.js');
+const { Client, Intents } = require("discord.js");
 const { DISCORD_CHANNELS, APPLICATION_RESPONSES } = require("../utilities/constants.js")
 
-const discordClient = new Client({ intents: [Intents.FLAGS.GUILDS, "GUILD_MEMBERS"] })
+const discordClient = new Client(
+  { 
+    intents: [
+      Intents.FLAGS.GUILDS, 
+      Intents.FLAGS.GUILD_MEMBERS
+    ] 
+  }
+)
 discordClient.login(process.env.DISCORD_TOKEN)
 
-discordClient.once('ready', async (client) => {
-	console.info('Discord Client Ready')
+discordClient.once("ready", async (client) => {
+	console.info("Discord Client Ready")
 })
 
 const sendMessageToChannel = async (channel, message) => {
@@ -22,7 +29,7 @@ const sendApplicationResponseToUser = async (status, discordUsername) => {
   
   if (!member) {
     console.warn(`Discord service - discord member ${discordUsername} not found.`)
-    sendMessageToChannel("applications", `User ${discordUsername} not found for '${status}' application response.`)
+    sendMessageToChannel("applications", `User ${discordUsername} not found for "${status}" application response.`)
     return false
   }
 

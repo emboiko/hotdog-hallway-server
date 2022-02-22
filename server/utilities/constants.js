@@ -10,7 +10,7 @@ const APPLICATION_STATUSES = {
 }
 
 const APPLICATION_RESPONSES = {
-  declined: "Thanks for applying to <Hotdog Hallway>, unfortunately at this time we have chosen to move forward with another applicant. You are always welcome to reapply as you see openings on the site!",
+  declined: "Thanks for applying to <Hotdog Hallway>! 🌭 Unfortunately at this time we have chosen to move forward with another applicant. You are always welcome to reapply as you see openings on the site!",
   accepted: "Thanks for applying to <Hotdog Hallway>! 🌭 The guild council has reviewed your application, and we think you might be a great fit! We'll reach out to you within 24 hours, but feel free to contact a council member in the meantime."
 }
 
