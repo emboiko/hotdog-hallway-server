@@ -45,16 +45,6 @@ const userSchema = new mongoose.Schema({
         required: true,
         default: 0,
     },
-    isCouncilMember: { // Deprecated in favor of guildMemberLevel
-        type: Boolean,
-        required: false,
-        default: false,
-    },
-    isGuildMember: {
-        type: Boolean,
-        required: false,
-        default: false,
-    },
     applicationID: {
         type: String,
     },
