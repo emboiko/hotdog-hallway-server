@@ -182,6 +182,24 @@ router.delete("/me/avatar", isLoggedIn, async (req, res) => {
     res.send()
 })
 
+router.delete("/:id/avatar", isLoggedIn, isCouncilMember, async (req, res) => {
+    let user
+    try {
+        user = await User.findById(req.params.id)
+    } catch (error) {
+        console.error(error)
+        return res.status(500).json({error: "Internal Server Error"})
+    }
+
+    if (!user) {
+        res.status(404).json({error: "User not found"})
+    }
+
+    user.avatar = null
+    await user.save()
+    res.status(200).json({message: "Success"})
+})
+
 router.get("/:id/avatar", async (req, res) => {
     try {
         const user = await User.findById(req.params.id)
