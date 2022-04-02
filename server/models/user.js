@@ -34,13 +34,26 @@ const userSchema = new mongoose.Schema({
     avatar: {
         type: Buffer
     },
-    isCouncilMember: {
+    /*
+        0: Non-Member/Applicant
+        1: Member/Non-Raider
+        2: Raider/Core Raider
+        3: Council/Guild Management/Guild Master
+     */
+    guildMemberLevel: {
+        type: Number,
+        required: true,
+        default: 0,
+    },
+    isCouncilMember: { // Deprecated in favor of guildMemberLevel
         type: Boolean,
-        required: true
+        required: false,
+        default: false,
     },
     isGuildMember: {
         type: Boolean,
-        required: true
+        required: false,
+        default: false,
     },
     applicationID: {
         type: String,

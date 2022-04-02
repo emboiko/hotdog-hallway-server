@@ -1,5 +1,5 @@
 const isCouncilMember = async (req, res, next) => {
-  if (!req.user.isCouncilMember) return res.status(400).json({error:"Unauthorized."})
+  if (req.user.guildMemberLevel !== 3) return res.status(400).json({error:"Unauthorized."})
   next()
 }
 

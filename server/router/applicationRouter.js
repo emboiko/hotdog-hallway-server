@@ -19,7 +19,7 @@ router.post("/", isLoggedIn, async (req, res) => {
     user.applicationID = application._id
   }
 
-  if (user.isGuildMember) {
+  if (user.guildMemberLevel > 0) {
     return res.status(400).json({error: `User ${user.username} is already a guild member`})
   }
 

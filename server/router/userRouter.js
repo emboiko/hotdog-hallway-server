@@ -22,8 +22,6 @@ const upload = multer({
 })
 
 router.post("/", async (req, res) => {
-    req.body.isCouncilMember = false
-    req.body.isGuildMember = false
     const user = new User(req.body)
     let token
     try {
@@ -90,8 +88,7 @@ router.get("/all", async (req, res) => {
     }
     const payloadUsers = users.map((user) => ({
         username: user.username,
-        isCouncilMember: user.isCouncilMember,
-        isGuildMember: user.isGuildMember,
+        guildMemberLevel: user.guildMemberLevel,
         className: user.className,
         race: user.race,
         specialization: user.specialization,
@@ -139,8 +136,15 @@ router.post("/:id/rank", isLoggedIn, isCouncilMember, async (req, res) => {
     const user = await User.findById(req.params.id)
     if (!user) return res.status(404).json({error:"User Not Found"})
 
-    if ((req.body.action === "Promote") && !user.isGuildMember) user.isGuildMember = true
-    if ((req.body.action === "Demote") && user.isGuildMember) user.isGuildMember = false
+    if (req.body.action === "Promote") {
+        if (user.guildMemberLevel > 2) return res.status(400).json({error:"User already max rank."})
+        user.guildMemberLevel += 1
+    }
+
+    if (req.body.action === "Demote") {
+        if (user.guildMemberLevel < 0) return res.status(400).json({error:"User already lowest rank."})
+        user.guildMemberLevel -= 1
+    }
     
     try {
         await user.save()
