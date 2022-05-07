@@ -36,7 +36,9 @@ router.post("/", isLoggedIn, async (req, res) => {
   try {
     await application.save()
     await user.save()
-    DiscordService.sendMessageToChannel("applications", message)
+    if (process.env.NODE_ENV === "production") {
+      DiscordService.sendMessageToChannel("applications", message)
+    }
     res.status(201).json({message: "Success", applicationID: application._id})
   } catch (error) {
     console.error(error)

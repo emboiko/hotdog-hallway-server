@@ -38,7 +38,14 @@ router.post("/", async (req, res) => {
             return res.status(500).json({error:"Internal Server Error"})
         }
     }
-    await sendMessageToChannel("applications", `New user account created.\nUsername: ${user.username}\nDiscord Username: ${user.discordUsername}`)
+
+    if (process.env.NODE_ENV === "production") {
+        await sendMessageToChannel(
+            "applications", 
+            `New user account created.\nUsername: ${user.username}\nDiscord Username: ${user.discordUsername}`
+        )
+    }
+    
     res.status(201).json({user, token})
 })
 
